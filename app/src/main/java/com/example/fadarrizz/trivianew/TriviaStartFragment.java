@@ -21,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.fadarrizz.trivianew.Common.Common;
+import com.example.fadarrizz.trivianew.Interface.VolleyCallback;
 import com.example.fadarrizz.trivianew.Model.Question;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -40,7 +41,7 @@ public class TriviaStartFragment extends Fragment {
     Context thisContext;
 
     private FirebaseAuth mAuth;
-    GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInClient mGoogleSignInClient;
 
     FirebaseDatabase database;
     DatabaseReference users;
@@ -134,6 +135,7 @@ public class TriviaStartFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
             return true;
         }
 
@@ -146,10 +148,9 @@ public class TriviaStartFragment extends Fragment {
     }
 
     public void JSONRequest(String url) {
-
         requestQueue = Volley.newRequestQueue(thisContext);
 
-        JsonArrayRequest request = new JsonArrayRequest(
+        final JsonArrayRequest request = new JsonArrayRequest(
                 Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {

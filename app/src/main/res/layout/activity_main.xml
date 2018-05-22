@@ -17,22 +17,13 @@
         android:layout_above="@+id/wrapLogin"
         android:layout_marginTop="25dp" />
 
-
-
-    <TextView
-        android:id="@+id/detail"
-        style="@style/MyTextDetail"
-        tools:text="Firebase User ID: 123456789abc"
-        android:textColor="@android:color/white"/>
-
     <RelativeLayout
     android:id="@+id/wrapLogin"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
-    android:layout_margin="8dp"
-    >
+    android:layout_margin="8dp">
 
         <TextView
             android:id="@+id/status"
@@ -64,93 +55,5 @@
         </LinearLayout>
 
     </RelativeLayout>
-
-
-
-    <!--<RelativeLayout-->
-        <!--android:id="@+id/wrapLogin"-->
-        <!--android:orientation="vertical"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--android:layout_margin="8dp"-->
-        <!--&gt;-->
-
-        <!--<android.support.v7.widget.CardView-->
-            <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-            <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-            <!--android:id="@+id/login"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="8dp"-->
-            <!--app:cardElevation="4dp" >-->
-
-            <!--<LinearLayout-->
-                <!--android:padding="16dp"-->
-                <!--android:orientation="vertical"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content">-->
-
-                <!--<com.rengwuxian.materialedittext.MaterialEditText-->
-                    <!--android:id="@+id/username"-->
-                    <!--android:hint="Username"-->
-                    <!--android:textColorHint="@color/colorPrimary"-->
-                    <!--android:textColor="@color/colorPrimary"-->
-                    <!--android:textSize="24sp"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--app:met_baseColor="@color/colorPrimary"-->
-                    <!--app:met_floatingLabel="highlight"-->
-                    <!--app:met_primaryColor="@color/colorPrimary"-->
-                    <!--app:met_singleLineEllipsis="true"-->
-                    <!--/>-->
-
-                <!--<com.rengwuxian.materialedittext.MaterialEditText-->
-                    <!--android:id="@+id/password"-->
-                    <!--android:hint="Password"-->
-                    <!--android:textColorHint="@color/colorPrimary"-->
-                    <!--android:textColor="@color/colorPrimary"-->
-                    <!--android:textSize="24sp"-->
-                    <!--android:inputType="textPassword"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--app:met_baseColor="@color/colorPrimary"-->
-                    <!--app:met_floatingLabel="highlight"-->
-                    <!--app:met_primaryColor="@color/colorPrimary"-->
-                    <!--app:met_singleLineEllipsis="true"-->
-                    <!--/>-->
-
-            <!--</LinearLayout>-->
-
-        <!--</android.support.v7.widget.CardView>-->
-        <!--<LinearLayout-->
-            <!--android:layout_below="@id/login"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:weightSum="2"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
-            <!---->
-            <!--<Button-->
-                <!--android:id="@+id/btnSignUp"-->
-                <!--android:text="Sign Up"-->
-                <!--style="@style/Widget.AppCompat.Button.Colored"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="wrap_content" />-->
-
-            <!--<Button-->
-                <!--android:id="@+id/btnSignIn"-->
-                <!--android:text="Sign In"-->
-                <!--style="@style/Widget.AppCompat.Button.Colored"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="wrap_content" />-->
-
-        <!--</LinearLayout>-->
-
-    <!--</RelativeLayout>-->
-
-
 
 </RelativeLayout>

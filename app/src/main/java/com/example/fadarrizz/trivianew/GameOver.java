@@ -39,7 +39,6 @@ public class GameOver extends AppCompatActivity {
 
         textViewResult = findViewById(R.id.textViewTotalScore);
         getTextViewResult = findViewById(R.id.textViewTotalQuestion);
-        progressBar = findViewById(R.id.gameOverProgressBar);
         btnTryAgain = findViewById(R.id.btnTryAgain);
 
         btnTryAgain.setOnClickListener(new View.OnClickListener() {
@@ -58,15 +57,9 @@ public class GameOver extends AppCompatActivity {
             int totalQuestion = extra.getInt("total");
             int correctAnswer = extra.getInt("correct");
 
-            final int highScore;
-
             textViewResult.setText(String.format("Score: %d", score));
             getTextViewResult.setText(String.format("Correct answered: %d / %d",
                                         correctAnswer, totalQuestion));
-
-            progressBar.setMax(totalQuestion);
-            progressBar.setProgress(correctAnswer);
-
 
             questionScore.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -80,6 +73,7 @@ public class GameOver extends AppCompatActivity {
                         if (score > Integer.parseInt(currentScoreClass.getScore())) {
                             setScore(score);
                         }
+                    // If score doesn't exists, set score
                     } else {
                         setScore(score);
                     }
