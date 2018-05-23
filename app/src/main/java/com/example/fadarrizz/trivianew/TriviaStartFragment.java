@@ -3,7 +3,6 @@ package com.example.fadarrizz.trivianew;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,13 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.fadarrizz.trivianew.Common.Common;
+import com.example.fadarrizz.trivianew.Helpers.Helpers;
 import com.example.fadarrizz.trivianew.Interface.VolleyCallback;
 import com.example.fadarrizz.trivianew.Model.Question;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -50,7 +43,7 @@ public class TriviaStartFragment extends Fragment {
     Button btnStart;
     Button signOutButton;
 
-    RequestQueue requestQueue;
+    ProgressDialog pDialog;
 
     public static TriviaStartFragment newInstance() {
         TriviaStartFragment triviaStartFragment = new TriviaStartFragment();
@@ -90,7 +83,7 @@ public class TriviaStartFragment extends Fragment {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new getQuestionsTask().execute("http://jservice.io/api/random?count=4");
+                getFirstQuestion();
             }
         });
 
@@ -104,56 +97,15 @@ public class TriviaStartFragment extends Fragment {
         return mFragment;
     }
 
-    public class getQuestionsTask extends AsyncTask<String, Void, Boolean> {
+    public void getFirstQuestion() {
 
-        private ProgressDialog pDialog;
+        pDialog = new ProgressDialog(getActivity());
+        pDialog.setMessage("Loading...");
+        pDialog.show();
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Loading...");
-            pDialog.show();
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-
-            // Clear questionList at start
-            if(Common.questionList.size() > 0) {
-                Common.questionList.clear();
-            }
-
-            int TOTAL_QUESTIONS = 15;
-
-            try {
-                for (int i = 0; i < TOTAL_QUESTIONS; i++) {
-                    JSONRequest(params[0]);
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            pDialog.dismiss();
-            Intent intent = new Intent(getActivity(), playTrivia.class);
-            startActivity(intent);
-        }
-    }
-
-    public void JSONRequest(String url) {
-        requestQueue = Volley.newRequestQueue(thisContext);
-
-        final JsonArrayRequest request = new JsonArrayRequest(
-                Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+        JSONRequest.getResponse(thisContext, "http://jservice.io/api/random?count=4", new VolleyCallback() {
             @Override
-            public void onResponse(JSONArray response) {
+            public void onSuccessResponse(JSONArray response) {
                 Question question = new Question();
                 for (int i = 0; i < response.length(); i++) {
                     try {
@@ -165,13 +117,13 @@ public class TriviaStartFragment extends Fragment {
                             String correctAnswer = jsonObject.getString("answer");
                             question.setCorrectAnswer(correctAnswer);
                             question.setAnswerA(correctAnswer);
-                        // Set answer from second question
+                            // Set answer from second question
                         } else if (i == 1) {
                             question.setAnswerB(jsonObject.getString("answer"));
-                        // Set answer from third question
+                            // Set answer from third question
                         } else if (i == 2) {
                             question.setAnswerC(jsonObject.getString("answer"));
-                        // Set answer from fourth question
+                            // Set answer from fourth question
                         } else if (i == 3) {
                             question.setAnswerD(jsonObject.getString("answer"));
                         }
@@ -181,17 +133,19 @@ public class TriviaStartFragment extends Fragment {
                         Toast.makeText(thisContext, "Error: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
-                // Add question to list
-                Common.questionList.add(question);
+                // Set current question
+                Helpers.currentQuestion = question;
+
+                pDialog.dismiss();
+                Intent intent = new Intent(getActivity(), playTrivia.class);
+                startActivity(intent);
             }
-        }, new Response.ErrorListener() {
+
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(thisContext, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+            public void onError(String message) {
+                Toast.makeText(thisContext, "Error: " + message, Toast.LENGTH_LONG).show();
             }
         });
-        Log.d("TAG", "Request added");
-        requestQueue.add(request);
     }
 
     private void signOut() {

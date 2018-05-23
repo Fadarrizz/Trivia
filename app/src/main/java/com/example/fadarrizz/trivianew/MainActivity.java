@@ -1,20 +1,14 @@
 package com.example.fadarrizz.trivianew;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.fadarrizz.trivianew.Common.Common;
+import com.example.fadarrizz.trivianew.Helpers.Helpers;
 import com.example.fadarrizz.trivianew.Model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -22,7 +16,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.signin.SignIn;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -35,10 +28,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.rengwuxian.materialedittext.MaterialEditText;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -49,8 +38,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     DatabaseReference users;
 
     private GoogleSignInClient mGoogleSignInClient;
-
     private FirebaseAuth mAuth;
+
+    private long onBackPressedTime;
+    private Toast backToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +148,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void setUserInfo() {
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         if (firebaseUser != null) {
+            // Create new user using Firebase info
             final User user = new User(firebaseUser.getDisplayName(),
                         firebaseUser.getEmail());
             users.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -177,8 +169,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         users.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Common.currentUser = dataSnapshot.child(user.getDisplayName()).getValue(User.class);
-                Log.d(TAG, "currentUser = " + Common.currentUser);
+                Helpers.currentUser = dataSnapshot.child(user.getDisplayName()).getValue(User.class);
+                Log.d(TAG, "currentUser = " + Helpers.currentUser);
             }
 
             @Override
@@ -186,5 +178,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Snackbar.make(findViewById(R.id.main_layout), "Database error: " + databaseError.toString(), Snackbar.LENGTH_LONG).show();
             }
         });
+    }
+
+    // Override back button
+    @Override
+    public void onBackPressed() {
+        if (onBackPressedTime + 2000 > System.currentTimeMillis()) {
+            backToast.cancel();
+            super.onBackPressed();
+            return;
+        } else {
+            backToast = Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+
+        onBackPressedTime = System.currentTimeMillis();
     }
 }

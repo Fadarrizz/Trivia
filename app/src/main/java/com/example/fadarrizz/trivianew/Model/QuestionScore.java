@@ -1,7 +1,6 @@
 package com.example.fadarrizz.trivianew.Model;
 
 public class QuestionScore {
-    private String questionScore;
     private String user;
     private String score;
 

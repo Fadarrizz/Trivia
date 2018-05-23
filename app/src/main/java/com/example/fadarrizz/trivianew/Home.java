@@ -8,10 +8,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class Home extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
+
+    private long onBackPressedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,5 +49,18 @@ public class Home extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frameLayout, TriviaStartFragment.newInstance());
         transaction.commit();
+    }
+
+    // Override back button to go to Home activity
+    @Override
+    public void onBackPressed() {
+        if (onBackPressedTime + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed();
+            return;
+        } else {
+            Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT).show();
+        }
+
+        onBackPressedTime = System.currentTimeMillis();
     }
 }

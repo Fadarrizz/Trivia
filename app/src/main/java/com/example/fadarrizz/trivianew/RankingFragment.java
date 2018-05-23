@@ -1,19 +1,15 @@
 package com.example.fadarrizz.trivianew;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
-import com.example.fadarrizz.trivianew.Common.Common;
+import com.example.fadarrizz.trivianew.Helpers.Helpers;
 import com.example.fadarrizz.trivianew.Interface.RankingCallback;
 import com.example.fadarrizz.trivianew.Model.QuestionScore;
 import com.example.fadarrizz.trivianew.Model.Ranking;
@@ -68,11 +64,10 @@ public class RankingFragment extends Fragment {
         rankingList.setLayoutManager(layoutManager);
 
         // Update score to ranking table
-        updateScore(Common.currentUser.getUserName(), new RankingCallback<Ranking>() {
+        updateScore(Helpers.currentUser.getUserName(), new RankingCallback<Ranking>() {
             @Override
             public void Callback(Ranking Ranking) {
                 rankingTable.child(Ranking.getUserName()).setValue(Ranking);
-                showRanking();
             }
         });
 
@@ -93,22 +88,6 @@ public class RankingFragment extends Fragment {
         rankingList.setAdapter(adapter);
 
         return mFragment;
-    }
-
-    private void showRanking() {
-        rankingTable.orderByChild("score").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    Ranking local = data.getValue(Ranking.class);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     private void updateScore(final String userName, final RankingCallback<Ranking> Callback) {

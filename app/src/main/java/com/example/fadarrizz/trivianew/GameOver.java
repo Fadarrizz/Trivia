@@ -9,8 +9,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.fadarrizz.trivianew.Common.Common;
-import com.example.fadarrizz.trivianew.Model.Question;
+import com.example.fadarrizz.trivianew.Helpers.Helpers;
 import com.example.fadarrizz.trivianew.Model.QuestionScore;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -54,20 +53,19 @@ public class GameOver extends AppCompatActivity {
         Bundle extra = getIntent().getExtras();
         if (extra != null) {
             final int score = extra.getInt("score");
-            int totalQuestion = extra.getInt("total");
             int correctAnswer = extra.getInt("correct");
 
             textViewResult.setText(String.format("Score: %d", score));
-            getTextViewResult.setText(String.format("Correct answered: %d / %d",
-                                        correctAnswer, totalQuestion));
+            getTextViewResult.setText(String.format("Correct answered: %d",
+                                        correctAnswer));
 
             questionScore.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    if (dataSnapshot.child(Common.currentUser.getUserName()).exists()) {
+                    if (dataSnapshot.child(Helpers.currentUser.getUserName()).exists()) {
                         // Get current score value
-                        QuestionScore currentScoreClass = dataSnapshot.child(Common.currentUser.getUserName())
+                        QuestionScore currentScoreClass = dataSnapshot.child(Helpers.currentUser.getUserName())
                                 .getValue(QuestionScore.class);
                         // Set score if higher then current score
                         if (score > Integer.parseInt(currentScoreClass.getScore())) {
@@ -88,8 +86,8 @@ public class GameOver extends AppCompatActivity {
     }
 
     public void setScore(int score) {
-        questionScore.child(String.format("%s", Common.currentUser.getUserName()))
-                .setValue(new QuestionScore(Common.currentUser.getUserName(),
+        questionScore.child(String.format("%s", Helpers.currentUser.getUserName()))
+                .setValue(new QuestionScore(Helpers.currentUser.getUserName(),
                         String.valueOf(score)));
     }
 }
